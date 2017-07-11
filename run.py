@@ -83,6 +83,7 @@ def shifts_tomorrow():
 
 	print(status(shifts))
 
+#gets rid of weird symbols people enter as part of their number
 def clean_number(number):
 	clean = ""
 	for i in number:
