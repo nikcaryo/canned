@@ -1,11 +1,18 @@
 from flask import Flask, request, redirect, render_template
 from twilio.twiml.messaging_response import MessagingResponse
 from datetime import datetime, timedelta, timezone
-import schedule
+from rq_scheduler import Scheduler
+from redis import Redis
+
 import pyrebase
 import string
 import sheets
 import os
+
+from rq import Queue
+from worker import conn
+
+q = Queue(connection=conn)
 
 
 
@@ -64,7 +71,7 @@ def new_shift(id):
 
 def test():
     print("here we go")
-	#update_scoreboard()
+    q.enqueue(update_scoreboard())
 
 #firebase automatically stores things in UTC time, so this changes it to local
 def utc_to_local(utc_dt):
@@ -205,8 +212,13 @@ def sms_reply():
 	response.message(message)
 	return str(response)
 
+
+
+
+
+
 if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
     test()
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
