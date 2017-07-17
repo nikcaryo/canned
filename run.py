@@ -5,6 +5,7 @@ import schedule
 import pyrebase
 import string
 import sheets
+import os
 
 
 
@@ -205,5 +206,7 @@ def sms_reply():
 	return str(response)
 
 if __name__ == "__main__":
-	test()
-	app.run(debug=True)
+	# Bind to PORT if defined, otherwise default to 5000.
+    port = int(os.environ.get('PORT', 5000))
+    test()
+    app.run(host='0.0.0.0', port=port, debug=True)
