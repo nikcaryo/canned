@@ -71,7 +71,7 @@ def new_shift(id):
 
 def test():
     print("here we go")
-    q.enqueue(update_scoreboard())
+    #q.enqueue(update_scoreboard())
 
 #firebase automatically stores things in UTC time, so this changes it to local
 def utc_to_local(utc_dt):
@@ -159,8 +159,8 @@ app = Flask(__name__)
 
 @app.route('/<string:page_name>/')
 def render_static(page_name):
-    if page_name == "update":
-        q.enqueue(update_scoreboard())
+    #if page_name == "update":
+        #q.enqueue(update_scoreboard())
     return render_template('%s.html' % page_name)
 
 @app.route("/sms", methods = ('GET', 'POST'))
