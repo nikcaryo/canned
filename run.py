@@ -7,6 +7,7 @@ import string
 import sheets
 
 
+
 config = {
   "apiKey": "AIzaSyDfwUxnBYr-1yn4MjiTnJ2Jyyby1OQgm4Q",
   "authDomain": "canned-test.firebaseapp.com",
@@ -148,9 +149,9 @@ def options():
 app = Flask(__name__)
 
 
-@app.route("/debug")
-def render_debug():
-    return render_template('debug.html')
+@app.route('/<string:page_name>/')
+def render_static(page_name):
+    return render_template('%s.html' % page_name)
 
 @app.route("/sms", methods = ('GET', 'POST'))
 def sms_reply():
