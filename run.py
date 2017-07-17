@@ -147,7 +147,12 @@ def options():
 
 app = Flask(__name__)
 
-@app.route("/", methods = ('GET', 'POST'))
+
+@app.route("/debug")
+def render_debug():
+    retuern render_template('debug.html')
+
+@app.route("/sms", methods = ('GET', 'POST'))
 def sms_reply():
 	response = MessagingResponse()
 	body     = request.values.get('Body', None)
