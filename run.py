@@ -28,6 +28,7 @@ db = firebase.database()
 
 def test():
     print("here we go")
+    print(new_shift("c001"))
     #q.enqueue(shifts_from_number, 6502797134)
     #q.enqueue(update_scoreboard)
     #q.enqueue(delete, 1, 1, 1)
@@ -68,10 +69,10 @@ def sms_reply():
 		return str(response)
 
 	try:
-		thisShift = new_shift(body[body.index("c")+1:])
+		thisShift = new_shift(body[body.index("c"):])
 	except (ValueError):
 		response.message("huh? use the right format plz")
-	return str(response)
+        return str(response)
 
 	if (number != thisShift.number):
 		message = "thats not your shift"
