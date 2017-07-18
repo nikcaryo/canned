@@ -76,7 +76,7 @@ def sms_reply():
 		return str(response)
 
 	print("shift number " + str(thisShift.number))
-	if (number != thisShift.number):
+	if (int(number) != int(thisShift.number)):
 		message = "thats not your shift"
 		response.message(message)
 		return str(response)
