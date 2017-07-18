@@ -28,7 +28,7 @@ db = firebase.database()
 
 def test():
 	print("here we go")
-	print(new_shift("c001"))
+	print(new_shift("c045"))
 	#q.enqueue(shifts_from_number, 6502797134)
 	#q.enqueue(update_scoreboard)
 	#q.enqueue(delete, 1, 1, 1)
