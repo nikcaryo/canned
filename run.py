@@ -52,7 +52,7 @@ def sms_reply():
 	message  = ""
 	shifts   = shifts_from_number((number))
 
-	print("phone " + number)
+	print("phone " + str(number))
 
 	print(body)
 	print(shifts)
@@ -75,7 +75,7 @@ def sms_reply():
 		response.message("huh? use the right format plz")
 		return str(response)
 
-	print("shift number " + thisShift.number)
+	print("shift number " + str(thisShift.number))
 	if (number != thisShift.number):
 		message = "thats not your shift"
 		response.message(message)
