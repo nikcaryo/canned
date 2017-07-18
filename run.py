@@ -27,11 +27,11 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
 def test():
-    print("here we go")
-    print(new_shift("c001"))
-    #q.enqueue(shifts_from_number, 6502797134)
-    #q.enqueue(update_scoreboard)
-    #q.enqueue(delete, 1, 1, 1)
+	print("here we go")
+	print(new_shift("c001"))
+	#q.enqueue(shifts_from_number, 6502797134)
+	#q.enqueue(update_scoreboard)
+	#q.enqueue(delete, 1, 1, 1)
 
 
 
@@ -40,9 +40,9 @@ app = Flask(__name__)
 
 @app.route('/<string:page_name>/')
 def render_static(page_name):
-    if page_name == "update":
-        q.enqueue(update_scoreboard)
-    return render_template('%s.html' % page_name)
+	if page_name == "update":
+		q.enqueue(update_scoreboard)
+	return render_template('%s.html' % page_name)
 
 @app.route("/sms", methods = ('GET', 'POST'))
 def sms_reply():
@@ -72,7 +72,7 @@ def sms_reply():
 		thisShift = new_shift(body[body.index("c"):])
 	except (ValueError):
 		response.message("huh? use the right format plz")
-        return str(response)
+		return str(response)
 
 	if (number != thisShift.number):
 		message = "thats not your shift"
@@ -102,6 +102,6 @@ def sms_reply():
 
 if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
-    test()
-    app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
+	port = int(os.environ.get('PORT', 5000))
+	test()
+	app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
