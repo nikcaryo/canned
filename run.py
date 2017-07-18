@@ -81,13 +81,13 @@ def sms_reply():
 		response.message(message)
 		return str(response)
 	elif ("confirm" in body):
-		db.child(thisShift.path).update({"lockedIn":"yes"})
+        q.enqueue(update_shift, thisShift.path, "no")
 		message = "shift #" + str(thisShift.id) + " locked in"
 	elif "no" in body:
-		db.child(thisShift.path).update({"lockedIn": "no"})
+        q.enqueue(update_shift, thisShift.path, "yes")
 		message = "shift #" + str(thisShift.id) + " unlocked"
 	elif "delete" in body:
-		db.child(thisShift.path).remove()
+        q.enqueue(delete_shift, thisShift.path)
 		message = "shift #" + str(thisShift.id) + " deleted"
 
 	#refresh shift data, cause we changed it up

@@ -113,6 +113,8 @@ def options():
 	message += "\n reply \'shifts\' to see your shifts"
 	message += "\n reply \'STOP\' to stop these reminders"
 	return message
+
+
 def update_scoreboard():
 	people = []
 	names = []
@@ -134,3 +136,10 @@ def update_scoreboard():
 		data[path] = this
 	print("scoreboard updated. time elapsed: " + str(datetime.now()-then))
 	db.update(data)
+
+
+def delete_shift(path):
+	db.child(path).remove()
+
+def update_shift(path, response):
+	db.child(path).update({"lockedIn":response})
