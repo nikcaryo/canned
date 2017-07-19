@@ -3,8 +3,7 @@ import os
 import redis
 from rq import Worker, Queue, Connection
 
-from sheets import delete
-from lib import *
+from utils import *
 
 
 

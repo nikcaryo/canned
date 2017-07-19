@@ -1,38 +1,43 @@
 from flask import Flask, request, redirect, render_template
 from twilio.twiml.messaging_response import MessagingResponse
-from datetime import datetime, timedelta, timezone
+from rq import Queue
 from rq_scheduler import Scheduler
 from redis import Redis
-
-import pyrebase
-import string
-from sheets import delete
-from lib import *
-
 import os
 
-from rq import Queue
+
 from worker import conn
+from utils import *
+
 
 q = Queue(connection=conn)
 
-config = {
-  "apiKey": "AIzaSyDfwUxnBYr-1yn4MjiTnJ2Jyyby1OQgm4Q",
-  "authDomain": "canned-test.firebaseapp.com",
-  "databaseURL": "https://canned-test.firebaseio.com",
-  "storageBucket": "canned-test.appspot.com"
- }
-
-firebase = pyrebase.initialize_app(config)
-db = firebase.database()
 
 def test():
 	print("here we go")
-	print(new_shift("c045"))
-	#q.enqueue(shifts_from_number, 6502797134)
-	#q.enqueue(update_scoreboard)
-	#q.enqueue(delete, 1, 1, 1)
+	print(Shift("c045"))
+	q.enqueue(shifts_from_number, 6502797134)
+	q.enqueue(update_scoreboard)
+	q.enqueue(sheets.delete, 1, 1, 1)
 
+#formats list of Shifts by calling their __str__ method
+#adds some info afterwards
+def status(shifts):
+	message = "Current Shifts:"
+	for shift in shifts:
+		message += "\n" + str(shift)
+	message += "\n\nReply confirm/delete followed by the ID to lock in/cancel a shift"
+	message += "\nOr, reply \'shifts\' to see the status of your shifts"
+	message += "\ni.e. \"confirm #a3\""
+	return message
+
+#returns string of stuff user can do
+def options():
+	message = "reply \'confirm #id\' to lock in your shift"
+	message += "\nreply \'delete #id\' to delete your shift"
+	message += "\n reply \'shifts\' to see your shifts"
+	message += "\n reply \'STOP\' to stop these reminders"
+	return message
 
 
 app = Flask(__name__)
@@ -70,7 +75,7 @@ def sms_reply():
 		return str(response)
 
 	try:
-		thisShift = new_shift(body[body.index("c"):])
+		thisShift = Shift(body[body.index("c"):])
 	except (ValueError):
 		response.message("huh? use the right format plz")
 		return str(response)
@@ -87,7 +92,7 @@ def sms_reply():
 		q.enqueue(update_shift, thisShift.path, "yes")
 		message = "shift #" + str(thisShift.id) + " unlocked"
 	elif "delete" in body:
-		q.enqueue(delete_shift, thisShift.path)
+		q.enqueue(delete_shift, thisShift)
 		message = "shift #" + str(thisShift.id) + " deleted"
 
 	#refresh shift data, cause we changed it up
@@ -96,10 +101,6 @@ def sms_reply():
 	print(message)
 	response.message(message)
 	return str(response)
-
-
-
-
 
 
 if __name__ == "__main__":
