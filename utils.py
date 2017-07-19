@@ -79,12 +79,13 @@ def update_scoreboard():
 	print("scoreboard updated. time elapsed: " + str(datetime.now()-then))
 	db.update(data)
 
-def delete_shift(path):
-	db.child(path).remove()
-
-def update_shift(path, shift):
-	db.child(shift.id).update({"lockedIn":response})
+def delete_shift(shift):
+	db.child(shift.path).remove()
 	sheets.delete(shift.sheet, shift.row, shift.column)
+
+
+def update_shift(path, response):
+	db.child(shift.path).update({"lockedIn":response})
 
 #queries database for all shifts tomorrow
 #need UTC time for tomorrow and next day to get all shifts within that range in Firebase
