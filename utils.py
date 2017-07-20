@@ -1,10 +1,6 @@
 from datetime import datetime, timedelta, timezone
-
-
-import sheets
 from database import db
-
-
+import sheets
 
 class Person(object):
 	def __init__(self, name, number):
@@ -82,7 +78,6 @@ def update_scoreboard():
 def delete_shift(shift):
 	db.child(shift.path).remove()
 	sheets.delete(shift.sheet, shift.row, shift.column)
-
 
 def update_shift(path, response):
 	db.child(shift.path).update({"lockedIn":response})

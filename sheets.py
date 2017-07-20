@@ -6,7 +6,6 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('key.json', scope
 gc = gspread.authorize(credentials)
 spread = gc.open('canned test')
 
-
 def test_sheets():
     print(spread.worksheets())
 
