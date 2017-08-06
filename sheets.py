@@ -11,6 +11,6 @@ def test_sheets():
 
 def delete(sheet,row,column):
     active = spread.worksheets()[sheet]
-    for i in range(0,5):
+    for i in range(0,2):
         active.update_cell(row, column + i, '')
         print("deleted: " + str(sheet) + str(row) + str(column + i))
