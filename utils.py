@@ -19,10 +19,9 @@ class Shift(object):
 		self.id       = id
 		self.path     = "shifts/" + id
 		values        = db.child("shifts").child(id).get().val()
-		self.date     = self.utc_to_local(datetime.strptime(values['date'], '%Y-%m-%dT%H:%M:00.000Z'))
+		self.date     = self.utc_to_local(datetime.strptime(values['date'][0:13], '%Y-%m-%dT%H'))
 		self.name     = values['name']
 		self.number   = self.clean_number(values['number'])
-		self.lockedIn = values['lockedIn']
 		self.sheet    = values['sheet']
 		self.row      = values['row']
 		self.column   = values['column']
@@ -31,7 +30,6 @@ class Shift(object):
 	def __str__(self):
 		string = str(self.date_readable())
 		string += ", ID: " + self.id
-		string += ", Locked in? " + self.lockedIn
 		return string
 
 	#formats the date
@@ -60,20 +58,23 @@ def update_scoreboard():
 	for child in db.child("shifts").get().each():
 		name = child.val()["name"]
 		number = child.val()["number"]
-		if name in names:
+		if name in names :
 			people[names.index(name)].addShift()
-		else:
+		elif name != "":
 			people.append(Person(name, number))
 			names.append(name)
-	data = {}
+	print(people)
 	for person in people:
-		this = {}
-		this["name"] = person.name
-		this["shifts"] = person.shifts
-		path = "scoreboard/" + str(person.name)
-		data[path] = this
+		data = {
+				"name": person.name,
+				"shifts" : person.shifts
+				}
+		db.child("scoreboard").child(str(person.name)).set(data)
+
 	print("scoreboard updated. time elapsed: " + str(datetime.now()-then))
-	db.update(data)
+
+
+
 
 def delete_shift(shift):
 	db.child(shift.path).remove()

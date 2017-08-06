@@ -13,10 +13,9 @@ q = Queue(connection=conn)
 
 def test():
 	print("here we go")
-	print(Shift("c045"))
+	print(Shift("c10308"))
 	q.enqueue(shifts_from_number, 6502797134)
 	q.enqueue(update_scoreboard)
-	q.enqueue(sheets.delete, 1, 1, 1)
 
 def status(shifts):
 	message = "Current Shifts:"
