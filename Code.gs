@@ -23,6 +23,7 @@ function writeDataToFirebase() {
   sheet = sheets[todaySheet]
 
   CHARS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']
+
   LOCATIONS = ["Safeway", "Bianchinnis", "DRAEGERS"]
 
   for(col = 3; col < 12; col += 4){

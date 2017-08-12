@@ -17,21 +17,7 @@ def test():
 	q.enqueue(shifts_from_number, 6502797134)
 	q.enqueue(update_scoreboard)
 
-def status(shifts):
-	message = "Current Shifts:"
-	for shift in shifts:
-		message += "\n" + str(shift)
-	message += "\n\nReply confirm/delete followed by the ID to lock in/cancel a shift"
-	message += "\nOr, reply \'shifts\' to see the status of your shifts"
-	message += "\ni.e. \"confirm #a3\""
-	return message
 
-def options():
-	message = "reply \'confirm #id\' to lock in your shift"
-	message += "\nreply \'delete #id\' to delete your shift"
-	message += "\n reply \'shifts\' to see your shifts"
-	message += "\n reply \'STOP\' to stop these reminders"
-	return message
 
 
 app = Flask(__name__)
@@ -39,6 +25,9 @@ app = Flask(__name__)
 
 @app.route('/<string:page_name>/')
 def render_static(page_name):
+	if page_name == "update":
+		q.enqueue(update_shifts)
+		q.enqueue(update_scoreboard)
 	if page_name == "update":
 		q.enqueue(update_scoreboard)
 	return render_template('%s.html' % page_name)
