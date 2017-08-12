@@ -25,6 +25,9 @@ class Person(object):
 	def addShift(self):
 		self.shifts += 1
 
+	def __str__(self):
+		return self.name
+
 class Shift(object):
 
 	#gets values from Firebase based on ID given
