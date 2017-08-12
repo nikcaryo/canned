@@ -7,21 +7,9 @@ from redis import Redis
 from worker import conn
 from utils import *
 
-
 q = Queue(connection=conn)
 
-
-def test():
-	print("here we go")
-	print(Shift("c10308"))
-	q.enqueue(shifts_from_number, 6502797134)
-	q.enqueue(update_scoreboard)
-
-
-
-
 app = Flask(__name__)
-
 
 @app.route('/<string:page_name>/')
 def render_static(page_name):
@@ -85,9 +73,7 @@ def sms_reply():
 	response.message(message)
 	return str(response)
 
-
 if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
 	port = int(os.environ.get('PORT', 5000))
-	test()
 	app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
