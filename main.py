@@ -15,7 +15,6 @@ app = Flask(__name__)
 def render_static(page_name):
 	if page_name == "update":
 		q.enqueue(update_shifts)
-		q.enqueue(update_scoreboard)
 	if page_name == "update":
 		q.enqueue(update_scoreboard)
 	return render_template('%s.html' % page_name)
