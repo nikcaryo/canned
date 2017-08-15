@@ -190,6 +190,7 @@ def get_today_sheet():
 	print(today)
 
 	for i in range(len(sheets)):
+		print(sheets[i].title)
 		if sheets[i].title == str(today):
 			print("{} sheet found!".format(sheets[i].title))
 			return i
