@@ -59,6 +59,8 @@ class Shift(object):
 	def utc_to_local(self, utc_dt):
 		return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
+
+
 def status(shifts):
 	message = "Current Shifts:"
 	for shift in shifts:
