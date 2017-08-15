@@ -187,6 +187,7 @@ def get_today_sheet():
 	today = timeNow().strftime('%a %b %-d')
 
 	print("finding today's sheet")
+	print(today)
 
 	for i in range(len(sheets)):
 		if sheets[i].title == str(today):
@@ -206,8 +207,6 @@ def sheet_data(sheetNum):
 	print(cleanData)
 	active.update_cell(1,1,"last synced at: {}".format(timeNow()))
 	return(cleanData)
-
-get_today_sheet()
 
 """
 
