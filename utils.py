@@ -75,6 +75,13 @@ def options():
 	message += "\n reply \'STOP\' to stop these reminders"
 	return message
 
+def timeNow():
+	#firebase automatically stores things in UTC time, so this changes it to local
+	return datetime.now().replace(tzinfo=timezone.utc).astimezone(tz=None)
+
+def asLocalZone(utc):
+	return utc.replace(tzinfo=timezone.utc).astimezone(tz=None)
+
 def update_scoreboard():
 	people = []
 	names = []
@@ -177,7 +184,7 @@ def create_id(x, y, z):
 def get_today_sheet():
 	"""find sheet for today"""
 
-	today = datetime.today().strftime('%a %b %-d')
+	today = timeNow().strftime('%a %b %-d')
 
 	print("finding today's sheet")
 
@@ -197,9 +204,10 @@ def sheet_data(sheetNum):
 		cleanData[i//13][int(i - 13*(i//13))] = cell.value
 
 	print(cleanData)
-	active.update_cell(1,1,"last synced at: {}".format(datetime.now()))
+	active.update_cell(1,1,"last synced at: {}".format(timeNow()))
 	return(cleanData)
 
+get_today_sheet()
 
 """
 
