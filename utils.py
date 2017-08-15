@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from database import db
-from sheets import sheets
+from sheets import getSheets
 
 
 #gets rid of weird symbols people enter as part of their number
@@ -106,7 +106,7 @@ def update_scoreboard():
 
 def delete_shift(shift):
 	db.child(shift.path).remove()
-	active = sheets[shift.sheet]
+	active = getSheets()[shift.sheet]
 	for i in range(0,2):
 		active.update_cell(shift.row, shift.column + i, '')
 		print("deleted: {},{},{}".format(shift.sheet,shift.row,shift.column))
@@ -188,7 +188,7 @@ def get_today_sheet():
 
 	print("finding today's sheet")
 	print(today)
-
+	sheets = getSheets()
 	for i in range(len(sheets)):
 		print(sheets[i].title)
 		if sheets[i].title == str(today):
@@ -197,7 +197,7 @@ def get_today_sheet():
 	print("Sheet not found")
 
 def sheet_data(sheetNum):
-	active = sheets[sheetNum]
+	active = getSheets()[sheetNum]
 	rawData = active.range('A1:M26')
 	cleanData = [[0 for x in range(13)] for y in range(26)]
 
