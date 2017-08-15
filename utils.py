@@ -78,7 +78,6 @@ def options():
 def update_scoreboard():
 	people = []
 	names = []
-	then = datetime.now()
 	for child in db.child("shifts").get().each():
 		name = child.val()["name"]
 		number = child.val()["number"]
@@ -95,7 +94,8 @@ def update_scoreboard():
 				}
 		db.child("scoreboard").child(str(person.name)).set(data)
 
-	print("scoreboard updated. time elapsed: " + str(datetime.now()-then))
+	print("scoreboard updated")
+
 
 def delete_shift(shift):
 	db.child(shift.path).remove()
@@ -156,23 +156,23 @@ def update_shifts():
 	update_scoreboard()
 
 def create_id(x, y, z):
-    """
-        using this little formula to generate the shift IDs
-        its a pairing function, but for 3 integers
-        so it'll give you a unique number for any (x,y,z) with order mattering
-        so it'll make the shift ids shorter and easier to type
-        http://dmauro.com/post/77011214305/a-hashing-function-for-x-y-z-coordinates
-    """
+	"""
+		using this little formula to generate the shift IDs
+		its a pairing function, but for 3 integers
+		so it'll give you a unique number for any (x,y,z) with order mattering
+		so it'll make the shift ids shorter and easier to type
+		http://dmauro.com/post/77011214305/a-hashing-function-for-x-y-z-coordinates
+	"""
 
-    big = max(x, y, z)
-    hash = big^3 + (2 * big * z) + z
-    if (big == z):
-        hash += max(x, y)^2
-    if (y >= x):
-        hash += x + y
-    else:
-        hash += y
-    return hash
+	big = max(x, y, z)
+	hash = big^3 + (2 * big * z) + z
+	if (big == z):
+		hash += max(x, y)^2
+	if (y >= x):
+		hash += x + y
+	else:
+		hash += y
+	return hash
 
 def get_today_sheet():
 	"""find sheet for today"""
@@ -188,16 +188,17 @@ def get_today_sheet():
 	print("Sheet not found")
 
 def sheet_data(sheetNum):
-    active = sheets[sheetNum]
-    rawData = active.range('A1:M26')
-    cleanData = [[0 for x in range(13)] for y in range(26)]
+	active = sheets[sheetNum]
+	rawData = active.range('A1:M26')
+	cleanData = [[0 for x in range(13)] for y in range(26)]
 
-    for i, cell in enumerate(rawData):
-        print(cell.value)
-        cleanData[i//13][int(i - 13*(i//13))] = cell.value
+	for i, cell in enumerate(rawData):
+		print(cell.value)
+		cleanData[i//13][int(i - 13*(i//13))] = cell.value
 
-    print(cleanData)
-    return(cleanData)
+	print(cleanData)
+	active.update_cell(1,1,"last synced at: {}".format(datetime.now()))
+	return(cleanData)
 
 
 """
