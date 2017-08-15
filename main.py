@@ -15,8 +15,8 @@ app = Flask(__name__)
 def render_static(page_name):
 	if page_name == "update":
 		q.enqueue(update_shifts)
-	if page_name == "update":
-		q.enqueue(update_scoreboard)
+	if page_name == "clean":
+		q.enqueue(cleanSheets)
 	return render_template('%s.html' % page_name)
 
 @app.route("/sms", methods = ('GET', 'POST'))
