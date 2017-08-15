@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from database import db
-from sheets import getSheets
+from sheets import getSheets, cleanSheets
 
 
 #gets rid of weird symbols people enter as part of their number
@@ -141,6 +141,7 @@ def shifts_from_number(number):
 	return shifts
 
 def update_shifts():
+	cleanSheets()
 	sheetNum = get_today_sheet()
 	sheetData = sheet_data(sheetNum)
 	data = {}
