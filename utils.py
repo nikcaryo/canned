@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from database import db
-from sheets import getSheets, cleanSheets
-
+from sheets import get_sheets, clean_sheets, get_today_sheet, sheet_data
+from sms import client
 
 #gets rid of weird symbols people enter as part of their number
 def clean_number(number):
@@ -42,6 +42,7 @@ class Shift(object):
 		self.date     = datetime.strptime(values['date'][0:13], '%Y-%m-%d %H')
 		self.name     = values['name']
 		self.number   = values['number']
+		self.location = values['location']
 
 
 	#return a string that looks nice
@@ -54,6 +55,9 @@ class Shift(object):
 	#Mon Jan 1 at 4:05 PM
 	def date_readable(self):
 		return self.date.strftime("%a %b %-d at %-I:%M %p")
+
+	def time_readable(self):
+		return self.date.strftime("%-I:%M %p")
 
 	#firebase automatically stores things in UTC time, so this changes it to local
 	def utc_to_local(self, utc_dt):
@@ -69,12 +73,11 @@ def status(shifts):
 	return message
 
 def options():
-	message = "reply \'confirm #id\' to lock in your shift"
-	message += "\nreply \'delete #id\' to delete your shift"
+	message = "reply \'confirm (id)\' to lock in your shift"
+	message += "\nreply \'delete (id)\' to delete your shift"
 	message += "\n reply \'shifts\' to see your shifts"
 	message += "\n reply \'STOP\' to stop these reminders"
 	return message
-
 
 def update_scoreboard():
 	people = []
@@ -99,7 +102,7 @@ def update_scoreboard():
 
 def delete_shift(shift):
 	db.child(shift.path).remove()
-	active = getSheets()[shift.sheet]
+	active = get_sheets()[shift.sheet]
 	for i in range(0,2):
 		active.update_cell(shift.row, shift.column + i, '')
 		print("deleted: {},{},{}".format(shift.sheet,shift.row,shift.column))
@@ -112,14 +115,35 @@ def delete_shift(shift):
 def shifts_tomorrow():
 	shifts = []
 
-	tomorrow = datetime.utcnow() + timedelta(days=0)
-	nextDay  = tomorrow + timedelta(days=1)
-	tomorrow = tomorrow.strftime("%Y-%m-%d 06:00:00.000000")
-	nextDay  = nextDay.strftime("%Y-%m-%d 06:00:00.000000")
+	tomorrow = datetime.utcnow().replace(hour = 0)
 
-	for child in db.child("shifts").order_by_child("date").start_at(tomorrow).end_at(nextDay).get().each():
-		shifts.append(Shift(child.val()['id']))
+	start = tomorrow.strftime("%Y-%m-%d 06:00:00.000000")
+	end  = tomorrow.strftime("%Y-%m-%d 23:59:00.000000")
+
+	print(start, end)
+	for child in db.child("shifts").order_by_child("date").start_at(start).end_at(end).get().each():
+		print(child)
+		if child.val()['name'] != '':
+			shifts.append(Shift(child.val()['id']))
+	print(shifts)
 	return shifts
+
+def send_sms():
+	shifts = shifts_tomorrow()
+	for shift in shifts:
+		message = client.messages.create(
+			to = "+1{}".format(shift.number),
+			from_ = "+14158533663",
+			body="Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
+		)
+
+
+
+
+
+
+
+
 
 #queries database for all shifts that match the number given
 #returns list of Shift objects
@@ -131,16 +155,20 @@ def shifts_from_number(number):
 	print(shifts)
 	return shifts
 
-def update_shifts():
-	cleanSheets()
-	sheetNum = get_today_sheet()
+def update_shifts(when):
+	clean_sheets()
+	ifTom = 0
+	if when == 'tomorrow':
+		ifTom = 1
+	sheetNum = get_today_sheet() + ifTom
 	sheetData = sheet_data(sheetNum)
+
 	data = {}
 	for col in range(4, 13, 4):
 		for row in range(3, 27):
 			id = "c{}".format(create_id(sheetNum, row, col))
 			hours = int((row-3)//4 *2 +10)
-			date = datetime.today().replace(hour = hours) + timedelta(days=1)
+			date = datetime.today().replace(hour = hours, minute = 0, second = 0) + timedelta(days = ifTom)
 			data[str(id)] = {
 				"id":       id,
 				"location": sheetData[0][col-1],
@@ -174,31 +202,3 @@ def create_id(x, y, z):
 	else:
 		hash += y
 	return hash
-
-def get_today_sheet():
-	"""find sheet for today"""
-
-	today = datetime.now().strftime('%a %b %-d')
-
-	print("finding today's sheet")
-	print(today)
-	sheets = getSheets()
-	for i in range(len(sheets)):
-		print(sheets[i].title)
-		if sheets[i].title == str(today):
-			print("{} sheet found!".format(sheets[i].title))
-			return i
-	print("Sheet not found")
-
-def sheet_data(sheetNum):
-	active = getSheets()[sheetNum]
-	rawData = active.range('A1:M26')
-	cleanData = [[0 for x in range(13)] for y in range(26)]
-
-	for i, cell in enumerate(rawData):
-		print(cell.value)
-		cleanData[i//13][int(i - 13*(i//13))] = cell.value
-
-	print(cleanData)
-	active.update_cell(1,1,"last synced at: {}".format(datetime.now())
-	return(cleanData)

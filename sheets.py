@@ -10,12 +10,12 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('key.json', scope
 gc = gspread.authorize(credentials)
 
 
-def getSheets():
+def get_sheets():
 	spread = gc.open('canned test')
 	sheets = spread.worksheets()
 	return sheets
 
-def cleanSheets():
+def clean_sheets():
 	spread = gc.open('canned test')
 	sheets = spread.worksheets()
 	for sheet in sheets:
@@ -27,3 +27,31 @@ def cleanSheets():
 				if cell.value in BAD_WORDS:
 					sheet.update_cell(cell.row, cell.col, "")
 					sheet.update_cell(cell.row, cell.col+1, "")
+
+def get_today_sheet():
+	"""find sheet for today"""
+
+	today = datetime.now().strftime('%a %b %-d')
+
+	print("finding today's sheet")
+	print(today)
+	sheets = get_sheets()
+	for i in range(len(sheets)):
+		print(sheets[i].title)
+		if sheets[i].title == str(today):
+			print("{} sheet found!".format(sheets[i].title))
+			return i
+	print("Sheet not found")
+
+def sheet_data(sheetNum):
+	active = get_sheets()[sheetNum]
+	rawData = active.range('A1:M26')
+	cleanData = [[0 for x in range(13)] for y in range(26)]
+
+	for i, cell in enumerate(rawData):
+		print(cell.value)
+		cleanData[i//13][int(i - 13*(i//13))] = cell.value
+
+	print(cleanData)
+	active.update_cell(1,1,"last synced at: {}".format(datetime.now()))
+	return(cleanData)
