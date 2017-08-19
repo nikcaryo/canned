@@ -2,7 +2,6 @@ import os
 from flask import Flask, request, redirect, render_template
 from twilio.twiml.messaging_response import MessagingResponse
 from rq import Queue
-from rq_scheduler import Scheduler
 from redis import Redis
 from worker import conn
 from utils import *
