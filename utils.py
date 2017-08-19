@@ -75,13 +75,6 @@ def options():
 	message += "\n reply \'STOP\' to stop these reminders"
 	return message
 
-def timeNow():
-	#gets local time, not werid utc standard time
-	return datetime.now().replace(tzinfo=timezone.utc).astimezone(tz=None)
-
-def asLocalZone(utc):
-	#changes weird utc time to local time
-	return utc.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
 def update_scoreboard():
 	people = []
@@ -185,7 +178,7 @@ def create_id(x, y, z):
 def get_today_sheet():
 	"""find sheet for today"""
 
-	today = timeNow().strftime('%a %b %-d')
+	today = datetime.now().strftime('%a %b %-d')
 
 	print("finding today's sheet")
 	print(today)
@@ -207,5 +200,5 @@ def sheet_data(sheetNum):
 		cleanData[i//13][int(i - 13*(i//13))] = cell.value
 
 	print(cleanData)
-	active.update_cell(1,1,"last synced at: {}".format(timeNow()))
+	active.update_cell(1,1,"last synced at: {}".format(datetime.now())
 	return(cleanData)
