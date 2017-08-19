@@ -6,9 +6,20 @@ from redis import Redis
 from worker import conn
 from utils import *
 
-q = Queue(connection=conn)
+import time
+import atexit
 
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+
+q = Queue(connection=conn)
 app = Flask(__name__)
+
+
+
+def update():
+	q.enqueue(update_shifts)
+
 
 @app.route('/<string:page_name>/')
 def render_static(page_name):
@@ -72,4 +83,15 @@ def sms_reply():
 if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
 	port = int(os.environ.get('PORT', 5000))
+
+	scheduler = BackgroundScheduler()
+	scheduler.start()
+	scheduler.add_job(
+	    func=update,
+	    trigger=IntervalTrigger(minutes=15),
+	    id='update',
+	    name='sync+clean spreadsheet, update scoreboard',
+	    replace_existing=True)
+	# Shut down the scheduler when exiting the app
+	atexit.register(lambda: scheduler.shutdown())
 	app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)

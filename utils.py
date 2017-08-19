@@ -59,8 +59,6 @@ class Shift(object):
 	def utc_to_local(self, utc_dt):
 		return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
-
-
 def status(shifts):
 	message = "Current Shifts:"
 	for shift in shifts:
@@ -78,10 +76,11 @@ def options():
 	return message
 
 def timeNow():
-	#firebase automatically stores things in UTC time, so this changes it to local
+	#gets local time, not werid utc standard time
 	return datetime.now().replace(tzinfo=timezone.utc).astimezone(tz=None)
 
 def asLocalZone(utc):
+	#changes weird utc time to local time
 	return utc.replace(tzinfo=timezone.utc).astimezone(tz=None)
 
 def update_scoreboard():
@@ -104,7 +103,6 @@ def update_scoreboard():
 		db.child("scoreboard").child(str(person.name)).set(data)
 
 	print("scoreboard updated")
-
 
 def delete_shift(shift):
 	db.child(shift.path).remove()
@@ -211,10 +209,3 @@ def sheet_data(sheetNum):
 	print(cleanData)
 	active.update_cell(1,1,"last synced at: {}".format(timeNow()))
 	return(cleanData)
-
-"""
-
-fix every method to new thing
-add timing for update methods
-build sms sending stuyff
-"""
