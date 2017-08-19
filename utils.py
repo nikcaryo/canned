@@ -166,6 +166,8 @@ def update_shifts(when):
 	data = {}
 	for col in range(4, 13, 4):
 		for row in range(3, 27):
+			if sheetData[row-1][col-1] == '':
+				break
 			id = "c{}".format(create_id(sheetNum, row, col))
 			hours = int((row-3)//4 *2 +10)
 			date = datetime.today().replace(hour = hours, minute = 0, second = 0) + timedelta(days = ifTom)

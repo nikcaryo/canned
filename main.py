@@ -17,9 +17,10 @@ app = Flask(__name__)
 
 
 def update():
+	print(get_today_sheet())
 	q.enqueue(update_shifts, 'today')
 	q.enqueue(update_shifts, 'tomorrow')
-	q.enqueue(send_sms)
+
 
 
 @app.route('/<string:page_name>/')
@@ -86,16 +87,15 @@ def sms_reply():
 if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
 	port = int(os.environ.get('PORT', 5000))
-	update()
-	scheduler = BackgroundScheduler()
-	scheduler.start()
-	scheduler.add_job(
-	    func=update,
-	    trigger=IntervalTrigger(minutes=15),
-	    id='update',
-	    name='sync+clean spreadsheet, update scoreboard',
-	    replace_existing=True)
+#	scheduler = BackgroundScheduler()
+#	scheduler.start()
+	#scheduler.add_job(
+	  #  func=update,
+	    #trigger=IntervalTrigger(minutes=15),
+	   # id='update',
+	   # name='sync+clean spreadsheet, update scoreboard',
+	   # replace_existing=True)
 	# Shut down the scheduler when exiting the app
-	atexit.register(lambda: scheduler.shutdown())
+#	atexit.register(lambda: scheduler.shutdown())
 
 	app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
