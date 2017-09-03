@@ -155,7 +155,7 @@ def update_shifts():
 		for col in range(4, 13, 4):
 			for row in range(3, 27):
 				print('{}{} being updated'.format(col, row))
-				if len(sheetData[row-1][col-1])!=0 or not(sheetData[row-1][col-1].isspace()):
+				if len(sheetData[row-1][col-1])!=0 and not(sheetData[row-1][col-1].isspace()):
 					id = "c{}".format(create_id(sheetNum, row, col))
 					hours = int((row-3)//4 *2 +10)
 					time = ''
