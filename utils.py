@@ -40,7 +40,7 @@ class Shift(object):
 		self.row      = values['row']
 		self.column   = values['column']
 		tempDate	  = values['date'] + " " + values['time']
-		self.date     = datetime.strptime(tempDate, '%a %b %d %I:%M %p')
+		self.date     = datetime.strptime(tempDate, '%a %b %d %I:%M %p').replace(year=2017)
 		self.name     = values['name']
 		self.number   = values['number']
 		self.location = values['location']
@@ -134,8 +134,6 @@ def send_sms():
 			body="Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
 		)
 
-
-
 #queries database for all shifts that match the number given
 #returns list of Shift objects
 def shifts_from_number(number):
@@ -145,6 +143,9 @@ def shifts_from_number(number):
 		shifts.append(Shift(id_))
 	print(shifts)
 	return shifts
+
+for shift in shifts_from_number(6502797134):
+	print(shift)
 
 def update_shifts():
 	db.child("shifts").set({})
