@@ -39,7 +39,8 @@ class Shift(object):
 		self.sheet    = values['sheet']
 		self.row      = values['row']
 		self.column   = values['column']
-		self.date     = datetime.strptime(values['date'][0:13], '%Y-%m-%d %H')
+		tempDate	  = values['date'] + " " + values['time']
+		self.date     = datetime.strptime(tempDate, '%a %b %d %I:%M %p')
 		self.name     = values['name']
 		self.number   = values['number']
 		self.location = values['location']
@@ -54,7 +55,7 @@ class Shift(object):
 	#formats the date
 	#Mon Jan 1 at 4:05 PM
 	def date_readable(self):
-		return self.date.strftime("%a %b %-d at %-I:%M %p")
+		return self.date.strftime("%a %b %d at %-I:%M %p")
 
 	def time_readable(self):
 		return self.date.strftime("%-I:%M %p")
@@ -114,14 +115,10 @@ def delete_shift(shift):
 #need UTC time for tomorrow and next day to get all shifts within that range in Firebase
 def shifts_tomorrow():
 	shifts = []
+	tomorrow = datetime.now().strftime('%a %b %-d')
 
-	tomorrow = datetime.utcnow().replace(hour = 0)
-
-	start = tomorrow.strftime("%Y-%m-%d 06:00:00.000000")
-	end  = tomorrow.strftime("%Y-%m-%d 23:59:00.000000")
-
-	print(start, end)
-	for child in db.child("shifts").order_by_child("date").start_at(start).end_at(end).get().each():
+	print("checking {}".format(tomorrow))
+	for child in db.child("shifts").order_by_child("date").equal_to(tomorrow).get().each():
 		print(child)
 		if child.val()['name'] != '':
 			shifts.append(Shift(child.val()['id']))
@@ -139,12 +136,6 @@ def send_sms():
 
 
 
-
-
-
-
-
-
 #queries database for all shifts that match the number given
 #returns list of Shift objects
 def shifts_from_number(number):
@@ -155,36 +146,38 @@ def shifts_from_number(number):
 	print(shifts)
 	return shifts
 
-def update_shifts(when):
-	clean_sheets()
-	ifTom = 0
-	if when == 'tomorrow':
-		ifTom = 1
-	sheetNum = get_today_sheet() + ifTom
-	sheetData = sheet_data(sheetNum)
+def update_shifts():
+	db.child("shifts").set({})
+	for sheetNum, sheet in enumerate(get_sheets()):
+		print('{} being updated'.format(sheetNum))
+		sheetData = sheet_data(sheetNum)
+		data = {}
+		for col in range(4, 13, 4):
+			for row in range(3, 27):
+				print('{}{} being updated'.format(col, row))
+				if sheetData[row-1][col-1] != '':
+					id = "c{}".format(create_id(sheetNum, row, col))
+					hours = int((row-3)//4 *2 +10)
+					time = ''
+					if hours > 12:
+						hours -= 12
+						time = "{}:00 PM".format(hours)
+					else:
+						time = "{}:00 AM".format(hours)
+					data[str(id)] = {
+						"id":       id,
+						"location": sheetData[0][col-1],
+						"date":     sheet.title,
+						"time":		time,
+						"name":     sheetData[row-1][col-1],
+						"number":   clean_number(sheetData[row-1][col]),
+						"sheet":    sheetNum,
+						"row":      row,
+						"column":   col
+					  }
+					print("shift {} updated".format(data[str(id)]))
 
-	data = {}
-	for col in range(4, 13, 4):
-		for row in range(3, 27):
-			if sheetData[row-1][col-1] == '':
-				break
-			id = "c{}".format(create_id(sheetNum, row, col))
-			hours = int((row-3)//4 *2 +10)
-			date = datetime.today().replace(hour = hours, minute = 0, second = 0) + timedelta(days = ifTom)
-			data[str(id)] = {
-				"id":       id,
-				"location": sheetData[0][col-1],
-				"date":     str(date),
-				"name":     sheetData[row-1][col-1],
-				"number":   clean_number(sheetData[row-1][col]),
-				"sheet":    sheetNum,
-				"row":      row,
-				"column":   col
-			  }
-			print("shift {} updated".format(data[str(id)]))
-
-	db.child("shifts").update(data)
-	update_scoreboard()
+		db.child("shifts").update(data)
 
 def create_id(x, y, z):
 	"""

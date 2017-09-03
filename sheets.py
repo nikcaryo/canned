@@ -2,13 +2,21 @@ import gspread
 from datetime import datetime, timedelta
 from oauth2client.service_account import ServiceAccountCredentials
 
-SHEET_NAMES = ['Tue Aug 15', 'Wed Aug 16', 'Thu Aug 17', 'Fri Aug 18', 'Sat Aug 19', 'Sun Aug 20', 'Mon Aug 21', 'Tue Aug 22', 'Wed Aug 23', 'Thu Aug 24', 'Fri Aug 25', 'Sat Aug 26', 'Sun Aug 27', 'Mon Aug 28', 'Tue Aug 29', 'Wed Aug 30', 'Thu Aug 31', 'Fri Sep 1', 'Sat Sep 2', 'Sun Sep 3', 'Mon Sep 4', 'Tue Sep 5', 'Wed Sep 6', 'Thu Sep 7', 'Fri Sep 8', 'Sat Sep 9', 'Sun Sep 10', 'Mon Sep 11', 'Tue Sep 12', 'Wed Sep 13']
-BAD_WORDS = ['shit', 'fuck']
+SHEET_NAMES = ['Sat Sep 2', 'Sun Sep 3', 'Mon Sep 4', 'Tue Sep 5', 'Wed Sep 6', 'Thu Sep 7', 'Fri Sep 8', 'Sat Sep 9', 'Sun Sep 10', 'Mon Sep 11', 'Tue Sep 12', 'Wed Sep 13', 'Thu Sep 14', 'Fri Sep 15', 'Sat Sep 16', 'Sun Sep 17', 'Mon Sep 18', 'Tue Sep 19', 'Wed Sep 20', 'Thu Sep 21', 'Fri Sep 22', 'Sat Sep 23', 'Sun Sep 24', 'Mon Sep 25', 'Tue Sep 26', 'Wed Sep 27', 'Thu Sep 28', 'Fri Sep 29', 'Sat Sep 30', 'Sun Oct 1']
 
 scope = ['https://spreadsheets.google.com/feeds']
 credentials = ServiceAccountCredentials.from_json_keyfile_name('key.json', scope)
 gc = gspread.authorize(credentials)
 
+def sheet_names():
+	SHEET_NAMES = []
+	for i in range(0,30):
+		SHEET_NAMES.append((datetime.now()+timedelta(days=i)).strftime('%a %b %-d'))
+	print(SHEET_NAMES)
+
+
+
+sheet_names()
 
 def get_sheets():
 	spread = gc.open('canned test')
@@ -53,5 +61,5 @@ def sheet_data(sheetNum):
 		cleanData[i//13][int(i - 13*(i//13))] = cell.value
 
 	print(cleanData)
-	active.update_cell(1,1,"last synced at: {}".format(datetime.now()))
+	active.update_cell(1,1,"last synced at: {}".format(datetime.now().strftime('%c')))
 	return(cleanData)
