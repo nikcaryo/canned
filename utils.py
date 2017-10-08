@@ -102,11 +102,11 @@ def update_scoreboard():
 	print("scoreboard updated")
 
 def delete_shift(shift):
-	db.child(shift.path).remove()
 	active = get_sheets()[shift.sheet]
 	for i in range(0,2):
 		active.update_cell(shift.row, shift.column + i, '')
 		print("deleted: {},{},{}".format(shift.sheet,shift.row,shift.column))
+	db.child(shift.path).remove()
 
 """def update_shift(path, response):
 	db.child(shift.path).update({"lockedIn":response})"""
