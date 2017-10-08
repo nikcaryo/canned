@@ -115,7 +115,7 @@ def delete_shift(shift):
 #need UTC time for tomorrow and next day to get all shifts within that range in Firebase
 def shifts_tomorrow():
 	shifts = []
-	tomorrow = datetime.now().strftime('%a %b %-d')
+	tomorrow = (datetime.now() + timedelta(days=1)).strftime('%a %b %-d')
 
 	print("checking {}".format(tomorrow))
 	for child in db.child("shifts").order_by_child("date").equal_to(tomorrow).get().each():
@@ -125,14 +125,12 @@ def shifts_tomorrow():
 	print(shifts)
 	return shifts
 
-def send_sms():
-	shifts = shifts_tomorrow()
-	for shift in shifts:
+def send_sms(shift):
 		message = client.messages.create(
 			to = "+1{}".format(shift.number),
 			from_ = "+14158533663",
 			body="Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
-		)
+
 
 #queries database for all shifts that match the number given
 #returns list of Shift objects

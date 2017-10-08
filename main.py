@@ -15,8 +15,12 @@ from apscheduler.triggers.interval import IntervalTrigger
 q = Queue(connection=conn)
 app = Flask(__name__)
 
+def sms():
+	for shift in shifts_tomorrow():
+		q.enqueue(send_sms, shift)
+
 def update():
-	#q.enqueue(clean_sheets)
+	q.enqueue(clean_sheets)
 	q.enqueue(update_shifts)
 	q.enqueue(update_scoreboard)
 
@@ -24,6 +28,8 @@ def update():
 def render_static(page_name):
 	if page_name == "update":
 		update()
+	if page_name == "sms":
+		sms()
 
 
 	return render_template('%s.html' % page_name)
@@ -92,6 +98,12 @@ if __name__ == "__main__":
 	    trigger=IntervalTrigger(minutes=15),
 	    id='update',
 	    name='sync+clean spreadsheet, update scoreboard',
+	    replace_existing=True)
+	scheduler.add_job(
+	    func=sms,
+	    trigger=IntervalTrigger(days=1),
+	    id='sms',
+	    name='send sms',
 	    replace_existing=True)
 	#Shut down the scheduler when exiting the app
 	atexit.register(lambda: scheduler.shutdown())
