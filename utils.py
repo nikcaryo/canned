@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from database import db
-from sheets import get_sheets, clean_sheets, get_today_sheet, sheet_data
+from sheets import get_sheets, clean_sheets, get_today_sheet, get_sheet_data
 from sms import client
 
 #gets rid of weird symbols people enter as part of their number
@@ -144,14 +144,12 @@ def shifts_from_number(number):
 	print(shifts)
 	return shifts
 
-for shift in shifts_from_number(6502797134):
-	print(shift)
-
 def update_shifts():
 	db.child("shifts").set({})
+	ALLsheetData = get_sheet_data()
 	for sheetNum, sheet in enumerate(get_sheets()):
 		print('{} being updated'.format(sheetNum))
-		sheetData = sheet_data(sheetNum)
+		sheetData = ALLsheetData[sheetNum]
 		data = {}
 		for col in range(4, 13, 4):
 			for row in range(3, 27):
@@ -178,7 +176,7 @@ def update_shifts():
 					  }
 					print("shift {} updated".format(data[str(id)]))
 
-		db.child("shifts").update(data)
+			db.child("shifts").update(data)
 
 def create_id(x, y, z):
 	"""

@@ -3,11 +3,13 @@ from datetime import datetime, timedelta
 from oauth2client.service_account import ServiceAccountCredentials
 
 
-SHEET_NAMES = ['Sat Sep 2', 'Sun Sep 3', 'Mon Sep 4', 'Tue Sep 5', 'Wed Sep 6', 'Thu Sep 7', 'Fri Sep 8', 'Sat Sep 9', 'Sun Sep 10', 'Mon Sep 11', 'Tue Sep 12', 'Wed Sep 13', 'Thu Sep 14', 'Fri Sep 15', 'Sat Sep 16', 'Sun Sep 17', 'Mon Sep 18', 'Tue Sep 19', 'Wed Sep 20', 'Thu Sep 21', 'Fri Sep 22', 'Sat Sep 23', 'Sun Sep 24', 'Mon Sep 25', 'Tue Sep 26', 'Wed Sep 27', 'Thu Sep 28', 'Fri Sep 29', 'Sat Sep 30', 'Sun Oct 1']
+SHEET_NAMES = ['Sat Oct 7', 'Sun Oct 8', 'Mon Oct 9', 'Tue Oct 10', 'Wed Oct 11', 'Thu Oct 12', 'Fri Oct 13', 'Sat Oct 14', 'Sun Oct 15', 'Mon Oct 16', 'Tue Oct 17', 'Wed Oct 18', 'Thu Oct 19', 'Fri Oct 20', 'Sat Oct 21', 'Sun Oct 22', 'Mon Oct 23', 'Tue Oct 24', 'Wed Oct 25', 'Thu Oct 26', 'Fri Oct 27', 'Sat Oct 28', 'Sun Oct 29', 'Mon Oct 30', 'Tue Oct 31', 'Wed Nov 1', 'Thu Nov 2', 'Fri Nov 3', 'Sat Nov 4', 'Sun Nov 5']
+BAD_WORDS = ["fuck", "shit"]
 
 scope = ['https://spreadsheets.google.com/feeds']
-credentials = ServiceAccountCredentials.from_json_keyfile_name('key.json', scope)
+credentials = ServiceAccountCredentials.from_json_keyfile_name('key_sheets.json', scope)
 gc = gspread.authorize(credentials)
+
 
 def sheet_names():
 	SHEET_NAMES = []
@@ -15,19 +17,16 @@ def sheet_names():
 		SHEET_NAMES.append((datetime.now()+timedelta(days=i)).strftime('%a %b %-d'))
 	print(SHEET_NAMES)
 
-
-
-sheet_names()
-
 def get_sheets():
-	spread = gc.open('canned test')
+	spread = gc.open('MA Canned Food Drive Signups')
 	sheets = spread.worksheets()
 	return sheets
 
 def clean_sheets():
-	spread = gc.open('canned test')
+	spread = gc.open('MA Canned Food Drive Signups')
 	sheets = spread.worksheets()
 	for sheet in sheets:
+		print(sheet.title)
 		if sheet.title not in SHEET_NAMES:
 			spread.del_worksheet(sheet)
 		else:
@@ -52,16 +51,20 @@ def get_today_sheet():
 			return i
 	print("Sheet not found")
 
+def get_sheet_data():
+	sheets = get_sheets()
+	sheetData = [x for x in range(len(sheets))]
+	print(sheetData)
+	for i, sheet in enumerate(sheets):
+		sheetData[i] = sheet.get_all_values()
+	return sheetData
 
-
-def sheet_data(sheetNum):
-	active = get_sheets()[sheetNum]
-	rawData = active.range('A1:M26')
+def old():
+	rawData = sheet.range('A1:M26')
 	cleanData = [[0 for x in range(13)] for y in range(26)]
-
 	for i, cell in enumerate(rawData):
 		cleanData[i//13][int(i - 13*(i//13))] = cell.value
 		if len(cell.value)!= 0 and not(cell.value.isspace()):
 			print(cell.value)
-	active.update_cell(1,1,"last synced at: {}".format(datetime.now().strftime('%c')))
+	sheet.update_cell(1,1,"last synced at: {}".format(datetime.now().strftime('%c')))
 	return(cleanData)

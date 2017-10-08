@@ -1,10 +1,12 @@
 import pyrebase
 
 config = {
-  "apiKey": "AIzaSyDfwUxnBYr-1yn4MjiTnJ2Jyyby1OQgm4Q",
-  "authDomain": "canned-test.firebaseapp.com",
-  "databaseURL": "https://canned-test.firebaseio.com",
-  "storageBucket": "canned-test.appspot.com"
+  "apiKey": "AIzaSyAkvtnmwoG7pxTif0RHSqbJxMrFI_LcgFA",
+  "authDomain": "ma-canned-food-drive-2017.firebaseapp.com",
+  "databaseURL": "https://ma-canned-food-drive-2017.firebaseio.com",
+  "storageBucket": "ma-canned-food-drive-2017.appspot.com",
+  "serviceAccount": "key_firebase.json"
+
  }
 
 firebase = pyrebase.initialize_app(config)

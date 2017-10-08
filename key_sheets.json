@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ma-canned-food-drive-2017",
+  "private_key_id": "494cdef8c5315a95b6a694714bb2b50a58a0345f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCGAo706m2bQfYL\n3xyZU4+9/8SGBc7Knn87moBeKnHbPHI5fxB6veR7Sh9xooHL7Uoa3JilDPDU79RM\nfjnM6akK5tMtye0nhmiZr4ODNLU8oDggLYMYDm5Vp6wguZUIP2X4w9PZ60BvIznq\nZnN0yhjewavjckVPafDcFgd6BqHt1Dgb+dwhxBEVLxJlQE/ZthMQUtLcBo+Ec0Wq\ngg9NKhzLsZPulv1DAdVhY5VCIIOlw3huOWUkeQrB/xDLy2bbX32JJO7FL0oArRx+\n6MzGAfcIrBtCq+WKlf4L65R8rApswzLmFHejdDFIcvDcAB1kewxc/ZENdbDGQmAs\nr4DCkh0RAgMBAAECggEAND+rHTKJqY7+L4K908oQsTOXm+mHxtglI0gJ5K0H10Kq\nBmDUPAbtnmQ3/kYt9SR/UBnSKgfxnhQj4e8U+h/gGLAGhkPEgzSUc9dKn01dnFWb\njHAyPJ7jxeGp6thwktalG2i+oKhoZuyFGC75tP9W0wMP0Y4sF9pmXmj4YUtUtzUG\nfLzlSvSOGLTSBgpdNUp/tGyUpYQ6NQ7dTra/plfsE6JHkP3EoGCuS3hKKGiWUre9\ngOfhCKH5DlIFnL8ZN2R1lGyVk55SVZ2zoLVH3Cd1SWP37pYRVlJyEVlIXw2bIFy8\n+oHPBxBhe2GQM/TmBUqzaPeIkuPn8T9hnfSNF672QQKBgQC5gHVG4BaLWxQsMA3S\njVOvAQwxLqY5b7O+FfVsOagBKOY9OESBSuNwavJ3O8v+E5Zu4cJvNTf78rldZW4q\nuIkWKwl1Vfo8HIKII9Mx35Qv7IgpBhdxs5gyYrg/2QU38EF6SvnVS+NB7SfzavtM\nMXsTtB0Yuev+lYU+nsiaLI4NKwKBgQC48HF8puOc/3xqL8h/i8lA9vKLDcnRGU5V\nbjJneTklnnuOn9OhVnuK1QiLgMW06B3OeLGce1Oiw56g0TzLYTe8jvoxIwaB6NCO\n6+gneCYb5oHefnvEWMwEsJ70iSRlV48NfhoOxtIXeWYgAtdaJ3N1+lw05UlOl5QQ\nv9qbcVi4swKBgAEgZJXvmnNyNCcoi4zxysZPTVGnJN9IbGEFJR5pIzoOk4dfphra\n55KxM5PByzVZzRoTSOj/+70N9k445Xhg8oQt8rrBsOlYivpkrU2qO+4mk5UcMlxA\naPY1X0UT/lIepWcmuWmwMkseM5Xo2mnWCxdNirexuVsscUi2EiXNi3dNAoGASTym\npIdugcDHI0Hy81eHBlwE5r46Gr0bwUcXXNSrpdMh+PQgGbcmy27bqGsBYEe/bgFr\nzJ0mHMG88tCJc7z3FovEVmsZa56n4MFZOTAiX1AkQ9jw6GuFt6G+APbCXAOVmfFD\nHnDrx/ICWFDnuUMAPUs88pGOOzpZn1xqlL4JNXMCgYEArpNOBI2gFKxZLdO3WbN8\nvCOuT8YJiAWnWvDkFh1JDKWeRu2JmIVbhQLl7n6MPd+eURjb5Jpp8OhnZUmRgvbq\n5Bxa5y8X2LO8eQ4gFvugG5Nggie7UD0pn7Gqx41VsTPnTvDnQ1L0rA3qwq6Wv2nq\nI++V+M1MwpJfV36CbtrlOdA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cannedsheets@ma-canned-food-drive-2017.iam.gserviceaccount.com",
+  "client_id": "111658588938736436458",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cannedsheets%40ma-canned-food-drive-2017.iam.gserviceaccount.com"
+}

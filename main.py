@@ -16,7 +16,7 @@ q = Queue(connection=conn)
 app = Flask(__name__)
 
 def update():
-	q.enqueue(clean_sheets)
+	#q.enqueue(clean_sheets)
 	q.enqueue(update_shifts)
 	q.enqueue(update_scoreboard)
 
@@ -84,7 +84,6 @@ def sms_reply():
 if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
 	port = int(os.environ.get('PORT', 5000))
-	send_sms()
 	update()
 	scheduler = BackgroundScheduler()
 	scheduler.start()
