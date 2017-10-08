@@ -159,8 +159,8 @@ def update_shifts():
 					time = ''
 					if hours > 12:
 						hours -= 12
-						time =
-					elif hours = 12:
+						time = "{}:00 PM".format(hours)
+					elif hours == 12:
 						time = "12:00 PM"
 					else:
 						time = "{}:00 AM".format(hours)
