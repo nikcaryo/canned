@@ -126,10 +126,11 @@ def shifts_tomorrow():
 	return shifts
 
 def send_sms(shift):
-		message = client.messages.create(
-			to = "+1{}".format(shift.number),
-			from_ = "+14158533663",
-			body="Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
+	message = client.messages.create(
+		to = "+1{}".format(shift.number),
+		from_ = "+14158533663",
+		body="Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
+		)
 
 
 #queries database for all shifts that match the number given
