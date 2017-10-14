@@ -108,3 +108,11 @@ if __name__ == "__main__":
 	#Shut down the scheduler when exiting the app
 	atexit.register(lambda: scheduler.shutdown())
 	app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
+
+
+#TODO reminder if multiple shifts on same days
+#number but no name?
+#area code shit
+#add more locations
+#better replying conversation flow
+#pay for heroku
