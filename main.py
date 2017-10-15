@@ -15,9 +15,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 q = Queue(connection=conn)
 app = Flask(__name__)
 
-def sms():
-	for shift in shifts_tomorrow():
-		q.enqueue(send_sms, shift)
+
 
 def update():
 	q.enqueue(clean_sheets)
@@ -91,22 +89,7 @@ if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
 	port = int(os.environ.get('PORT', 5000))
 	update()
-	scheduler = BackgroundScheduler()
-	scheduler.start()
-	scheduler.add_job(
-	    func=update,
-	    trigger=IntervalTrigger(minutes=15),
-	    id='update',
-	    name='sync+clean spreadsheet, update scoreboard',
-	    replace_existing=True)
-	scheduler.add_job(
-	    func=sms,
-	    trigger=IntervalTrigger(days=1),
-	    id='sms',
-	    name='send sms',
-	    replace_existing=True)
-	#Shut down the scheduler when exiting the app
-	atexit.register(lambda: scheduler.shutdown())
+
 	app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
 
 

@@ -3,6 +3,7 @@ from database import db
 from sheets import get_sheets, clean_sheets, get_today_sheet, get_sheet_data
 from sms import client
 
+
 #gets rid of weird symbols people enter as part of their number
 def clean_number(number):
 	print(number)
@@ -125,12 +126,15 @@ def shifts_tomorrow():
 	print(shifts)
 	return shifts
 
+
+
 def send_sms(shift):
-	message = client.messages.create(
-		to = "+1{}".format(shift.number),
-		from_ = "+14158533663",
-		body="Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
-		)
+	for shift in shifts_tomorrow():
+		message = client.messages.create(
+			to = "+1{}".format(shift.number),
+			from_ = "+14158533663",
+			body="Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
+			)
 
 
 #queries database for all shifts that match the number given
