@@ -27,7 +27,7 @@ def render_static(page_name):
 	if page_name == "update":
 		update()
 	if page_name == "sms":
-		send_sms()
+		q.enqueue(send_sms)
 
 
 	return render_template('%s.html' % page_name)
