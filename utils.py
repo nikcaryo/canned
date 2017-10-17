@@ -128,7 +128,7 @@ def shifts_tomorrow():
 
 
 
-def send_sms(shift):
+def send_sms():
 	for shift in shifts_tomorrow():
 		message = client.messages.create(
 			to = "+1{}".format(shift.number),
