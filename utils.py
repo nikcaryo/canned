@@ -136,7 +136,7 @@ def send_sms():
 				)
 		except:
 			pass
-send_sms()
+
 
 #queries database for all shifts that match the number given
 #returns list of Shift objects
