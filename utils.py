@@ -130,9 +130,9 @@ def send_sms():
 	for shift in shifts_tomorrow():
 		try:
 			message = client.messages.create(
-				to = "+1{}".format(shift.number),
-				from_ = "+14158533663",
-				body="Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
+				to     = "+1{}".format(shift.number),
+				from_  = "+14158533663",
+				body   = "Hey {}! Looks like you're signed up for a shift tomorrow at {} at {}!\nThis shift's id is: {} \n\n {}".format(shift.name, shift.time_readable(), shift.location, shift.id, options())
 				)
 		except:
 			pass
@@ -203,3 +203,10 @@ def create_id(x, y, z):
 	else:
 		hash += y
 	return hash
+
+def check(name):
+	message = client.messages.create(
+		to    = "6502797134",
+		from_ = "+14158533663",
+		body  = name
+		)
