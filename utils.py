@@ -152,7 +152,7 @@ def update_shifts():
 	db.child("shifts").set({})
 	ALLsheetData = get_sheet_data()
 	for sheetNum, sheet in enumerate(get_sheets()):
-		print('{} being updated'.format(sheetNum))
+		print('{} being updated'.format(sheet.name))
 		sheetData = ALLsheetData[sheetNum]
 		data = {}
 		for col in range(4, 13, 4):
