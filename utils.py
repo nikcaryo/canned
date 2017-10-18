@@ -3,20 +3,6 @@ from database import db
 from sheets import get_sheets, clean_sheets, get_today_sheet, get_sheet_data
 from sms import client
 
-
-#gets rid of weird symbols people enter as part of their number
-def clean_number(number):
-	print(number)
-	if len(number) == 0:
-		return number
-	clean  = ""
-	for i in number:
-		if i.isdigit():
-			clean += i
-	if clean[0] == "1":
-		clean = clean[1:]
-	return clean
-
 class Person(object):
 	def __init__(self, name, number):
 		self.name   = name
@@ -64,6 +50,20 @@ class Shift(object):
 	#firebase automatically stores things in UTC time, so this changes it to local
 	def utc_to_local(self, utc_dt):
 		return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+
+#gets rid of weird symbols people enter as part of their number
+def clean_number(number):
+	#if it's blank or contains letters, just store the whole thing. let twilio figure out it's not a number
+	if len(number) == 0 or (number.isupper() or number.islower()):
+		return number
+	else:
+		clean  = ""
+		for i in number:
+			if i.isdigit():
+				clean += i
+		if clean[0] == "1":
+			clean = clean[1:]
+		return clean
 
 def status(shifts):
 	message = "Current Shifts:"
