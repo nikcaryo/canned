@@ -20,7 +20,6 @@ app = Flask(__name__)
 def update():
 	q.enqueue(clean_sheets)
 	q.enqueue(update_shifts)
-	q.enqueue(update_scoreboard)
 
 @app.route('/<string:page_name>/')
 def render_static(page_name):

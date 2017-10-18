@@ -21,6 +21,6 @@ def update_clean():
 	print("15 min elapsed. updating database")
 	q.enqueue(clean_sheets)
 	q.enqueue(update_shifts)
-	q.enqueue(update_scoreboard)
+
 
 sched.start()

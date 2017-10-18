@@ -183,6 +183,7 @@ def update_shifts():
 					print("shift {} updated".format(data[str(id)]))
 
 			db.child("shifts").update(data)
+	update_scoreboard()
 
 def create_id(x, y, z):
 	"""
