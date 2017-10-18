@@ -8,6 +8,10 @@ sched = BlockingScheduler()
 
 
 
+@sched.scheduled_job('interval', minutes=40)
+def refresh_sheets():
+	q.enqueue(refresh_token)
+
 @sched.scheduled_job('cron', day_of_week='mon-sun', hour=17)
 def send_sms():
 	q.enqueue(send_sms)

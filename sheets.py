@@ -11,6 +11,9 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('key_sheets.json'
 gc = gspread.authorize(credentials)
 
 
+def refresh_token():
+	gc.login()
+
 def sheet_names():
 	SHEET_NAMES = []
 	for i in range(0,30):
