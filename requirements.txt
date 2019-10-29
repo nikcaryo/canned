@@ -1,4 +1,4 @@
-Flask==0.12.2
+Flask==1.0
 twilio==6.3.0
 redis==2.10.5
 rq_scheduler==0.7.0
